@@ -17,6 +17,8 @@ from data import *
 
 from .base import *
 
+from .helpers import *
+
 import copy
 
 
@@ -380,8 +382,7 @@ class JointModel(Tagger):
         rets['loss'] = loss
             
         return rets
-    
-    
+
     def _postprocess_entities(self, tags_list):
         
         entities = []
@@ -392,7 +393,7 @@ class JointModel(Tagger):
         
         return entities
     
-    def _postprocess_relations(self, relation_logits, entities):
+    def _postprocess_relations(self, relation_logits, entities, threshold=0.8):
         
         # convert relation_logits to relations on entities 
         
@@ -407,13 +408,26 @@ class JointModel(Tagger):
         
         relation_logits = relation_logits.detach().softmax(-1).cpu()
         for i_batch, _entities in enumerate(entities):
-            
+            # print(fw_togglemap)
+            # print(bw_togglemap)
             curr = set()
             for (ib, ie, it), (jb, je, jt) in permutations(_entities, 2):
+                # print(ib, ie, it)
+                # print(jb, je, jt)
+                # print(relation_logits[i_batch, ib:ie, jb:je].sum(0).sum(0))
+                # print((relation_logits[i_batch, ib:ie, jb:je].sum(0).sum(0) / ((ie-ib) * (je-jb))).sum())
+                # print(relation_logits[i_batch, ib:ie, jb:je].sum(0).sum(0) @ fw_togglemap)
+                # print(relation_logits[i_batch, jb:je, ib:ie].sum(0).sum(0) @ bw_togglemap)
+                # print('=============')
+
                 fw_logit = relation_logits[i_batch, ib:ie, jb:je].sum(0).sum(0) @ fw_togglemap
                 bw_logit = relation_logits[i_batch, jb:je, ib:ie].sum(0).sum(0) @ bw_togglemap
                 
                 logit = fw_logit + bw_logit
+
+                logit = logit / ((ie - ib) * (je - jb) * 2)
+                logit = (logit >= threshold).int()
+                # print((logit / ((ie - ib) * (je - jb) * 2)).sum())
 
                 rid = int(logit.argmax())
                 rtag = self.re_tag_indexing.idx2token(rid)
@@ -463,16 +477,34 @@ class JointModel(Tagger):
                     fw_togglemap[head_id, 0] = 1
                     bw_togglemap[tail_id, 0] = 1
                     bw_togglemap[head_id, tail_id] = 1
-                
+            # print(fw_togglemap)
+            # print(bw_togglemap)
+            # print('=======================')
         self.fw_togglemap = fw_togglemap
         self.bw_togglemap = bw_togglemap
         
         self.need_update = False
         
         return self.fw_togglemap, self.bw_togglemap
-    
+
+    # def predict_step_logits(self, inputs, threshold):
+    #
+    #     rets = self.forward_step(inputs)
+    #     ner_tag_logits = rets['ner_tag_logits']
+    #     re_tag_logits = rets['re_tag_logits']
+    #     mask = rets['masks']
+    #     mask_np = mask.cpu().detach().numpy()
+    #
+    #     ner_tag_preds = make_prediction_with_undecided(ner_tag_logits, mask_np,
+    #                                                    self.ner_tag_indexing.vocab, threshold)
+    #
+    #     matrix_mask_np = mask_np[:, np.newaxis] + mask_np[:, :, np.newaxis]
+    #     re_tag_preds = make_prediction_with_undecided(re_tag_logits, matrix_mask_np,
+    #                                                   self.re_tag_indexing.vocab, threshold)
+    #     return ner_tag_preds, re_tag_preds
+
     def predict_step(self, inputs):
-        
+        threshold = 0.8
         rets = self.forward_step(inputs)
         re_tag_logits = rets['re_tag_logits']
         ner_tag_logits = rets['ner_tag_logits']
@@ -482,10 +514,12 @@ class JointModel(Tagger):
         if self.config.crf == 'CRF':
             ner_tag_preds = self.crf_layer.decode(ner_tag_logits, mask=mask)
         elif not self.config.crf:
-            ner_tag_preds = ner_tag_logits.argmax(dim=-1).cpu().detach().numpy()
+            _ner_tag_logits = torch.softmax(ner_tag_logits, dim=-1)
+            _ner_tag_logits = (_ner_tag_logits >= threshold).int()
+            ner_tag_preds = _ner_tag_logits.argmax(dim=-1).cpu().detach().numpy()
         else:
             raise Exception('not a compatible decode')
-            
+
         ner_tag_preds = np.array(ner_tag_preds)
         ner_tag_preds *= mask_np
         ner_tag_preds = self.ner_tag_indexing.inv(ner_tag_preds)
@@ -494,17 +528,17 @@ class JointModel(Tagger):
         matrix_mask_np = mask_np[:, np.newaxis] + mask_np[:, :, np.newaxis]
 
         ## uncomment below to return relation tag for each entry by argmax
-        #re_tag_preds = relation_logits.argmax(dim=-1).cpu().detach().numpy()
-        #re_tag_preds *= matrix_mask_np
-        #re_tag_preds = self.re_tag_indexing.inv(re_tag_preds) # str:(B, N, N)
-        #rets['re_tag_preds'] = re_tag_preds
+        # re_tag_preds = re_tag_logits.argmax(dim=-1).cpu().detach().numpy()
+        # re_tag_preds *= matrix_mask_np
+        # re_tag_preds = self.re_tag_indexing.inv(re_tag_preds) # str:(B, N, N)
+        # rets['re_tag_preds'] = re_tag_preds
 
         entity_preds = self._postprocess_entities(ner_tag_preds)
         # relation_preds = self._postprocess_relations(relation_logits, rets['entities']) # use GOLD entity spans
-        relation_preds = self._postprocess_relations(re_tag_logits, entity_preds)
+        relation_preds = self._postprocess_relations(re_tag_logits, entity_preds, threshold=threshold)
         rets['entity_preds'] = entity_preds
         rets['relation_preds'] = relation_preds
-            
+
         return rets
     
     def train_step(self, inputs):
