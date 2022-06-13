@@ -1,3 +1,4 @@
+
 % Type requirements
 peop(X), loc(P) :- liveIn(X,P).
 loc(P), loc(Q) :- locatedIn(P,Q).
@@ -21,6 +22,13 @@ peop(X), peop(Y):- kill(X,Y).
 :- workFor(X,X).
 :- kill(X,X).
 
+:- peop(X), loc(X).
+:- peop(X), org(X).
+:- peop(X), other(X).
+:- loc(X), org(X).
+:- loc(X), other(X).
+:- org(X), other(X).
+
 
 % Triplets
 orgBasedIn(O, P2) :- locatedIn(P1,P2), orgBasedIn(O,P1).
@@ -34,19 +42,19 @@ liveIn(X,P2) :- liveIn(X,P1), locatedIn(P1,P2).
 {locatedIn(P1, P2); locatedIn(P2, P1)} :- liveIn(X,P1), liveIn(X,P2).
 
 
-liveIn(X,P) :- workFor(X,O), orgBasedIn(O,P).
+liveIn(X,P) :- workFor(X,O), orgBasedIn(O,P). % Not absolutely correct, we assume no one works remotely
 % workFor(X,O) :- liveIn(X,P), orgBasedIn(O,P). % not true
-orgBasedIn(O,P) :- liveIn(X,P), workFor(X,O).
+orgBasedIn(O,P) :- liveIn(X,P), workFor(X,O). % Not absolutely correct, we assume no one works remotely
 
 
 % Quadruplets
-liveIn(Y,P2) :- liveIn(X,P1), liveIn(X,P2), liveIn(Y,P1), locatedIn(P1,P2).
-locatedIn(R,Q2) :- locatedIn(P,Q1), locatedIn(P,Q2), locatedIn(R,Q1), locatedIn(Q1,Q2).
-orgBasedIn(O2,P2) :- orgBasedIn(O1,P1), orgBasedIn(O1,P2), orgBasedIn(O2,P1), locatedIn(P1,P2).
+% liveIn(Y,P2) :- liveIn(X,P1), liveIn(X,P2), liveIn(Y,P1), locatedIn(P1,P2).
+% locatedIn(R,Q2) :- locatedIn(P,Q1), locatedIn(P,Q2), locatedIn(R,Q1), locatedIn(Q1,Q2).
+% orgBasedIn(O2,P2) :- orgBasedIn(O1,P1), orgBasedIn(O1,P2), orgBasedIn(O2,P1), locatedIn(P1,P2).
 
 
-liveIn(X,P2) :- liveIn(X,P1), orgBasedIn(O,P1), orgBasedIn(O,P2), locatedIn(P1,P2).
-liveIn(Y,P1) :- workFor(X,O1), orgBasedIn(O1,P1), workFor(Y,O1).
+% liveIn(X,P2) :- liveIn(X,P1), orgBasedIn(O,P1), orgBasedIn(O,P2), locatedIn(P1,P2).
+% liveIn(Y,P1) :- workFor(X,O1), orgBasedIn(O1,P1), workFor(Y,O1).
 
 
 % orgBasedIn(O,P2) :- liveIn(X,P1), liveIn(X,P2), orgBasedIn(O,P1), locatedIn(P1,P2). % This is the same as rule #1
@@ -59,17 +67,5 @@ liveIn(Y,P1) :- workFor(X,O1), orgBasedIn(O1,P1), workFor(Y,O1).
 
 
 % Facts
-% locatedIn("Las_Cruces", "New_Mexico").
-% orgBasedIn("NMSU", "Las_Cruces").
 
-
-%peop("Trung").
-%peop("Huiping").
-%loc("Las_Cruces").
-%loc("New_Mexico").
-%liveIn("Trung", "Las_Cruces").
-%liveIn("Huiping", "Las_Cruces").
-%liveIn("Trung", "New_Mexico").
-%locatedIn("Las_Cruces", "New_Mexico").
-
-
+peop("George_Shibley").
