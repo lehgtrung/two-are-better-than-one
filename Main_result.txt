@@ -1,0 +1,73 @@
+### 06/23/2022
+
+label pct: 100%
+model: model: ./ckpts/conll04_100
+{'entity_p': 0.8730305838658663,
+'entity_r': 0.8730305838658663,
+'entity_f1': 0.8730305900549543,
+'relation_p': 0.6610576922918014,
+'relation_r': 0.6516587677570697,
+'relation_f1': 0.6563245901699409,
+'relation_p_wNER': 0.6586538461380131,
+'relation_r_wNER': 0.6492890995106804,
+'relation_f1_wNER': 0.6539379553407647}
+
+
+Label pct: 30%
+Threshold: argmax
+ASP: False
+model: ./ckpts/conll04_30_argmax_wo_asp
+{'entity_p': 0.8471454880216654,
+'entity_r': 0.8526413345611433,
+'entity_f1': 0.8498845329396266,
+'relation_p': 0.49261992619017303,
+'relation_r': 0.6327014217859549,
+'relation_f1': 0.5539419173228981,
+'relation_p_wNER': 0.4907749077400226,
+'relation_r_wNER': 0.6303317535395656,
+'relation_f1_wNER': 0.5518672285377317}
+
+
+Label pct: 30%
+Threshold: argmax
+ASP: w verification
+model: ./ckpts/conll04_30_verification
+{'entity_p': 0.8624641833728515,
+'entity_r': 0.8368860055529483,
+'entity_f1': 0.8494826028113824,
+'relation_p': 0.6189258311862167,
+'relation_r': 0.5734597156262213,
+'relation_f1': 0.5953259614873617,
+'relation_p_wNER': 0.6163682864292489,
+'relation_r_wNER': 0.5710900473798319,
+'relation_f1_wNER': 0.5928659369017911}
+
+
+Label pct: 30%
+Threshold: 80%
+ASP: False
+model: ./ckpts/conll04_30_thresholded_wo_asp
+{'entity_p': 0.8572761193949882,
+'entity_r': 0.8517145505018378,
+'entity_f1': 0.8544862917900554,
+'relation_p': 0.47294938917150176,
+'relation_r': 0.6421800947715123,
+'relation_f1': 0.5447236268261911,
+'relation_p_wNER': 0.46596858637930244,
+'relation_r_wNER': 0.6327014217859549,
+'relation_f1_wNER': 0.5366834258648013}
+
+
+Label pct: 30%
+Threshold: ground truth
+ASP: False
+model: ./ckpts/conll04_30_groundtruth
+{'entity_p': 0.8889943073919451,
+'entity_r': 0.8683966635693384,
+'entity_f1': 0.8785747834426222,
+'relation_p': 0.694444444426908,
+'relation_r': 0.6516587677570697,
+'relation_f1': 0.6723716458750546,
+'relation_p_wNER': 0.694444444426908,
+'relation_r_wNER': 0.6516587677570697,
+'relation_f1_wNER': 0.6723716458750546}
