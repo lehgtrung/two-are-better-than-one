@@ -68,17 +68,15 @@
 :- atom(kill(X, Y)), ok(kill(X, Y)), not ok(peop(Y)).
 
 % We don't want a standalone entity (how to filter standalone entities)
-:- atom(org(X)), ok(org(X)), #count{1,Y : ok(orgbasedIn(X, Y))}==0, #count{1,Y : ok(workFor(Y, X))}==0.
+%:- atom(org(X)), ok(org(X)), #count{1,Y : ok(orgbasedIn(X, Y))}==0, #count{1,Y : ok(workFor(Y, X))}==0.
 
-:- atom(loc(X)), ok(loc(X)), #count{1,Y : ok(locatedIn(X, Y))}==0, #count{1,Y : ok(locatedIn(Y, X))}==0.
+%:- atom(loc(X)), ok(loc(X)), #count{1,Y : ok(locatedIn(X, Y))}==0,
+%#count{1,Y : ok(locatedIn(Y, X))}==0, #count{1,Y : ok(orgbasedIn(Y, X))}==0,
+%#count{1,Y : ok(liveIn(Y, X))}==0.
 
-:- atom(peop(X)), ok(peop(X)), #count{1,Y : ok(liveIn(X, Y))}==0, #count{1,Y : ok(kill(X, Y))}==0, #count{1,Y : ok(kill(Y, X))}==0.
-
-
-% What if we introduce confidence for each prediction and we do an optimization to select the more confident prediction
-% over the weaker ones?
-% Or since the entity detection is more accurate than the relation prediction, can we trust the entity detection
-% more? for example in this case, we keep atom(org("CDT_Tuesday")) rather than atom(locatedIn("Galveston","Texas.")).
+%:- atom(peop(X)), ok(peop(X)), #count{1,Y : ok(liveIn(X, Y))}==0,
+%#count{1,Y : ok(kill(X, Y))}==0,
+%#count{1,Y : ok(kill(Y, X))}==0.
 
 
 { ok(X) } :- atom(X).
@@ -91,11 +89,40 @@ nOfOKAtoms(N) :- N = #count{1,X : ok(X),atom(X)}.
 #show nOfOKAtoms/1.
 
 % Facts
-atom(org("CDT_Tuesday")).
-atom(loc("Port_Arther")).
-atom(loc("Galveston")).
-atom(loc("Texas.")).
-atom(locatedIn("Galveston","Texas.")).
-atom(locatedIn("CDT_Tuesday","Texas.")).
-atom(locatedIn("Port_Arther","Texas.")).
-atom(locatedIn("Port_Arther","Galveston")).
+%atom(org("CDT_Tuesday")).
+%atom(loc("Port_Arther")).
+%atom(loc("Galveston")).
+%atom(loc("Texas.")).
+%atom(locatedIn("Galveston","Texas.")).
+%atom(locatedIn("CDT_Tuesday","Texas.")).
+%atom(locatedIn("Port_Arther","Texas.")).
+%atom(locatedIn("Port_Arther","Galveston")).
+
+%atom(loc("U.S.")).
+%atom(loc("Havana")).
+%atom(org("Radio_Reloj_Network")).
+%atom(orgbasedIn("Radio_Reloj_Network","Havana")).
+%atom(orgbasedIn("Radio_Reloj_Network","U.S.")).
+
+%atom(peop("Prince_Ranariddh")).
+%atom(loc("Jakarta")).
+%atom(loc("Phnom_Penh")).
+%atom(liveIn("Prince_Ranariddh","Phnom_Penh")).
+%atom(locatedIn("Prince_Ranariddh","Jakarta")).
+
+%atom(loc("Ontario")).
+%atom(locatedIn("Lance_Davis","Ontario")).
+%atom(org("Truck_Stops_of_America")).
+%atom(orgbasedIn("Truck_Stops_of_America","Ontario")).
+%atom(peop("Lance_Davis")).
+%atom(workFor("Lance_Davis","Truck_Stops_of_America")).
+
+
+
+
+
+
+
+
+
+

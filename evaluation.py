@@ -182,10 +182,6 @@ parser.add_argument('--device',
                     default=None, type=none_or_str,
                     action='store',)
 
-parser.add_argument('--train_path',
-                    default=None, type=none_or_str,
-                    action='store', required=True)
-
 
 # In[4]:
 
@@ -235,7 +231,8 @@ flag = args.dataset
 trainer = Trainer(
     model=model,
     # train_path=f'./datasets/unified/train.{flag}.json',
-    train_path=f'{args.train_path}',
+    train_path=f'./datasets/unified/train.{flag}_30_labeled.json',
+    # train_path=f'./datasets/ssl_outputs/thresholded_no_isolation.json',
     test_path=f'./datasets/unified/test.{flag}.json',
     valid_path=f'./datasets/unified/valid.{flag}.json',
     label_config=args.label_config,
@@ -251,7 +248,8 @@ trainer = Trainer(
 
 # %%capture cap
 print("=== start training ===")
-trainer.train_model(args=args)
+rets = trainer.evaluate_model(model=model, test_type='test')
+print(rets)
 
 
 

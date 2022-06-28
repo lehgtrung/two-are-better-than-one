@@ -112,4 +112,4 @@ _w.data[:len(_w_data)] = _w_data
 if __name__ == '__main__':
     make_prediction(model,
                     'datasets/unified/train.CoNLL04_30_unlabeled.json',
-                    'datasets/ssl_outputs/predicted.CoNLL04_30_unlabeled.json')
+                    'datasets/ssl_outputs/argmax_predicted.CoNLL04_30_unlabeled.json')

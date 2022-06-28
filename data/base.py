@@ -28,10 +28,15 @@ class Trainer:
         
     def train_model(self, model=None, trainer_target=None, args=None):
         
-        if model is None:
+        # if model is None:
+        #     model = self.model
+        #
+        # if model is not None:
+        #     config = model.config
+        # else:
+        #     config = None
+        if self.model:
             model = self.model
-        
-        if model is not None:
             config = model.config
         else:
             config = None

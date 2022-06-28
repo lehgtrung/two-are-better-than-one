@@ -487,21 +487,6 @@ class JointModel(Tagger):
         
         return self.fw_togglemap, self.bw_togglemap
 
-    # def predict_step_logits(self, inputs, threshold):
-    #
-    #     rets = self.forward_step(inputs)
-    #     ner_tag_logits = rets['ner_tag_logits']
-    #     re_tag_logits = rets['re_tag_logits']
-    #     mask = rets['masks']
-    #     mask_np = mask.cpu().detach().numpy()
-    #
-    #     ner_tag_preds = make_prediction_with_undecided(ner_tag_logits, mask_np,
-    #                                                    self.ner_tag_indexing.vocab, threshold)
-    #
-    #     matrix_mask_np = mask_np[:, np.newaxis] + mask_np[:, :, np.newaxis]
-    #     re_tag_preds = make_prediction_with_undecided(re_tag_logits, matrix_mask_np,
-    #                                                   self.re_tag_indexing.vocab, threshold)
-    #     return ner_tag_preds, re_tag_preds
 
     def predict_step(self, inputs):
         threshold = 0.8
@@ -514,8 +499,9 @@ class JointModel(Tagger):
         if self.config.crf == 'CRF':
             ner_tag_preds = self.crf_layer.decode(ner_tag_logits, mask=mask)
         elif not self.config.crf:
-            _ner_tag_logits = torch.softmax(ner_tag_logits, dim=-1)
-            _ner_tag_logits = (_ner_tag_logits >= threshold).int()
+            # _ner_tag_logits = torch.softmax(ner_tag_logits, dim=-1)
+            # _ner_tag_logits = (_ner_tag_logits >= threshold).int()
+            _ner_tag_logits = ner_tag_logits
             ner_tag_preds = _ner_tag_logits.argmax(dim=-1).cpu().detach().numpy()
         else:
             raise Exception('not a compatible decode')

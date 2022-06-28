@@ -13,7 +13,7 @@ python gens/gen_bert.py \
       --save_attention 1   \
         --save_path ./wv/albert.conll04_with_heads.pkl
 
-
+# Train with labelled data
 python -u train.py \
     --num_layers 2 \
     --batch_size 1 \
@@ -24,6 +24,68 @@ python -u train.py \
     --max_steps 20000 \
     --model_class JointModel  \
     --model_write_ckpt ./ckpts/conll04_30 \
+    --crf None \
+    --optimizer adam \
+    --lr 0.001 \
+    --tag_form iob2 \
+    --cased 0 \
+    --token_emb_dim 100 \
+    --char_emb_dim 30 \
+    --char_encoder lstm \
+    --lm_emb_dim 4096 \
+    --head_emb_dim 768 \
+    --lm_emb_path ./wv/albert.conll04_with_heads.pkl \
+    --hidden_dim 200 \
+    --ner_tag_vocab_size 9 \
+    --re_tag_vocab_size 11 \
+    --vocab_size 15000 \
+    --dropout 0.5 \
+    --grad_period 1
+
+
+
+# Train with predicted data
+python -u train.py \
+    --model_read_ckpt ./ckpts/conll04_30 \
+    --num_layers 2 \
+    --batch_size 1 \
+    --evaluate_interval 1000 \
+    --dataset CoNLL04 \
+    --pretrained_wv ./wv/glove.6B.100d.conll04.txt  \
+    --max_epoches 5000 \
+    --max_steps 20000 \
+    --model_class JointModel  \
+    --model_write_ckpt ./ckpts/conll04_30_ssl \
+    --crf None \
+    --optimizer adam \
+    --lr 0.001 \
+    --tag_form iob2 \
+    --cased 0 \
+    --token_emb_dim 100 \
+    --char_emb_dim 30 \
+    --char_encoder lstm \
+    --lm_emb_dim 4096 \
+    --head_emb_dim 768 \
+    --lm_emb_path ./wv/albert.conll04_with_heads.pkl \
+    --hidden_dim 200 \
+    --ner_tag_vocab_size 9 \
+    --re_tag_vocab_size 11 \
+    --vocab_size 15000 \
+    --dropout 0.5 \
+    --grad_period 1
+
+
+# Evaluation
+python -u train.py \
+    --num_layers 2 \
+    --batch_size 1 \
+    --evaluate_interval 1000 \
+    --dataset CoNLL04 \
+    --pretrained_wv ./wv/glove.6B.100d.conll04.txt  \
+    --max_epoches 5000 \
+    --max_steps 20000 \
+    --model_class JointModel  \
+    --model_read_ckpt ./ckpts/conll04_100 \
     --crf None \
     --optimizer adam \
     --lr 0.001 \

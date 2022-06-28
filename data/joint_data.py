@@ -116,7 +116,8 @@ class JointTrainer(Trainer):
                  *args, **kargs):
         self.batch_size = batch_size
         self.model = model
-        self.train = JointDataLoader(train_path, model=model, batch_size=batch_size, 
+        # self.model.global_steps.data = torch.zeros_like(model.global_steps)
+        self.train = JointDataLoader(train_path, model=model, batch_size=batch_size,
                                        shuffle=shuffle, num_workers=num_workers, tag_form=tag_form,)
         self.test = JointDataLoader(test_path, model=model, batch_size=8, # small bs for evaluation
                                        num_workers=num_workers, tag_form=tag_form,)
