@@ -67,7 +67,17 @@ def main(prg):
      
         counter = counter + 1 
      
-    print("\n\n All optimal answer sets:",  listAll) 
+    #print("\n\n All optimal answer sets:",  listAll)
+    newListAll = []
+    for answerset in listAll:
+        _list = []
+        for atom in answerset:
+            #atom = str(atom).replace('"', '')
+            atom = str(atom)
+            _list.append(atom)
+        newListAll.append(_list)
+    print(newListAll)
+
      
 #end.
  

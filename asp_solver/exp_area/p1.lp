@@ -78,6 +78,17 @@
 %#count{1,Y : ok(kill(Y, X))}==0.
 
 
+% Facts
+atom(org("CDT_Tuesday")).
+atom(loc("Port_Arther")).
+atom(loc("Galveston")).
+atom(loc("Texas.")).
+atom(locatedIn("Galveston","Texas.")).
+atom(locatedIn("CDT_Tuesday","Texas.")).
+atom(locatedIn("Port_Arther","Texas.")).
+atom(locatedIn("Port_Arther","Galveston")).
+
+
 { ok(X) } :- atom(X).
 
 nOfOKAtoms(N) :- N = #count{1,X : ok(X),atom(X)}.
