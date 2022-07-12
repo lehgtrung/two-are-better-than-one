@@ -27,6 +27,8 @@ def split_data_for_ssl(in_path, out_path, portion):
         json.dump(labeled, f)
     with open(out_path.format('unlabeled.json'), 'w') as f:
         json.dump(unlabeled, f)
+    with open(out_path.format('indices.json'), 'w') as f:
+        json.dump(indices, f)
 
 
 def gen_data_folds(in_path):
@@ -69,8 +71,8 @@ def train_gen_labeled_data(index):
     --evaluate_interval 1000 \
     --dataset CoNLL04 \
     --pretrained_wv ../wv/glove.6B.100d.conll04.txt \
-    --max_epoches 5000 \
-    --max_steps 20000 \
+    --max_epoches 2000 \
+    --max_steps {} \
     --model_class JointModel \
     --model_write_ckpt {} \
     --crf None  \
@@ -86,10 +88,11 @@ def train_gen_labeled_data(index):
     --lm_emb_path ../wv/albert.conll04_with_heads.pkl \
     --hidden_dim 200     --ner_tag_vocab_size 9 \
     --re_tag_vocab_size 11     --vocab_size 15000     --dropout 0.5  \
-    --grad_period 1 --warm_steps 0 \
+    --grad_period 1 --warm_steps 1000 \
     --train_path {}
     """
-    train_script = based_train_script.format(base_model_path, base_train_path)
+    train_script = based_train_script.format(20000, base_model_path, base_train_path)
+    print('Experiment #{}: Train on labeled data'.format(index))
     subprocess.run(train_script, shell=True, check=True)
     # Predict
     predict_script = f"""python ../predict_script.py {base_model_path} \
@@ -116,10 +119,12 @@ def train_gen_labeled_data(index):
     with open(raw_train_path, 'w') as f:
         json.dump(raw, f)
     # Re-train on raw prediction
-    raw_train_script = based_train_script.format(raw_model_path, raw_train_path)
+    print('Experiment #{}: Retrain on raw data'.format(index))
+    raw_train_script = based_train_script.format(25000, raw_model_path, raw_train_path)
     subprocess.run(raw_train_script, shell=True, check=True)
     # Re-train on verified prediction
-    verify_train_script = based_train_script.format(verify_model_path, verify_train_path)
+    print('Experiment #{}: Retrain on verified data'.format(index))
+    verify_train_script = based_train_script.format(25000, verify_model_path, verify_train_path)
     subprocess.run(verify_train_script, shell=True, check=True)
 
     # Evaluation
@@ -157,9 +162,13 @@ def train_gen_labeled_data(index):
 
 
 if __name__ == '__main__':
-    gen_data_folds('../datasets/unified/train.CoNLL04.json')
-    # train_gen_labeled_data(index=1)
-    for i in tqdm(range(10)):
-        train_gen_labeled_data(index=i+1)
+    # gen_data_folds('../datasets/unified/train.CoNLL04.json')
+    train_gen_labeled_data(index=6)
+    train_gen_labeled_data(index=8)
+    train_gen_labeled_data(index=5)
+    # for i in tqdm(range(10)):
+    #     print('================================')
+    #     print('Experiment #{}'.format(i+1))
+    #     train_gen_labeled_data(index=i+1)
 
 
