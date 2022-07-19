@@ -361,6 +361,9 @@ if __name__ == '__main__':
         data_point = convert_solution_to_data(tokens, united_atoms)
         _, final_eweights, _, final_rweights = split_entities_relations(united_atoms, atom_weights)
 
+        assert len(final_eweights) == len(data_point['entities'])
+        assert len(final_rweights) == len(data_point['relations'])
+
         # Convert solution to new data
         data_point = {
             'tokens': data_point['tokens'],
