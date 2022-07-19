@@ -1,6 +1,6 @@
 % Type inference
 
-loc(Q) :- locatedIn(P,Q).
+loc(P) :- locatedIn(P,Q).
 loc(Q) :- locatedIn(P,Q).
 
 org(O) :- orgbasedIn(O,P).
@@ -23,4 +23,3 @@ liveIn(X,P2) :- liveIn(X,P1), locatedIn(P1,P2).
 % Not absolutely correct, we assume no one works remotely
 liveIn(X,P) :- workFor(X,O), orgbasedIn(O,P).
 orgbasedIn(O,P) :- liveIn(X,P), workFor(X,O).
-

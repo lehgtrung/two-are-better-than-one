@@ -1,7 +1,10 @@
 
 conda create -n twoone python=3.8
 conda activate twoone
+# Local machine
 conda install pytorch==1.4.0 torchvision==0.5.0 cudatoolkit=10.1 -c pytorch
+# Kaiju server
+conda install pytorch cudatoolkit=11.3 -c pytorch
 pip install transformers==2.9.1
 pip install flair==0.4.5
 pip install gpustat

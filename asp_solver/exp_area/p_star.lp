@@ -126,10 +126,4 @@ nOfOKAtoms(N) :- N = #count{1,X : ok(X),atom(X)}.
 
 
 
-atom(peop("Penry")).
-atom(peop("Pamela_Moseley_Carpenter")).
-atom(loc("Livingston")).
-atom(loc("Texas")).
-atom(locatedIn("Penry","Pamela_Moseley_Carpenter")).
-atom(locatedIn("Pamela_Moseley_Carpenter","Livingston")).
-atom(locatedIn("Livingston","Texas")).
+atom(org("Warren_Commission")).

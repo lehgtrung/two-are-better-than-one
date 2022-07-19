@@ -326,7 +326,8 @@ class JointModel(Tagger):
             'masks': Tensor
         }
         '''
-        
+        print(inputs)
+        exit()
         inputs = self.forward_embeddings(inputs)
         tab_embeddings = inputs['tab_embeddings']
         seq_embeddings = inputs['seq_embeddings']

@@ -164,8 +164,8 @@ def train_gen_labeled_data(index):
 if __name__ == '__main__':
     # gen_data_folds('../datasets/unified/train.CoNLL04.json')
     train_gen_labeled_data(index=6)
-    train_gen_labeled_data(index=8)
-    train_gen_labeled_data(index=5)
+    # train_gen_labeled_data(index=8)
+    # train_gen_labeled_data(index=5)
     # for i in tqdm(range(10)):
     #     print('================================')
     #     print('Experiment #{}'.format(i+1))

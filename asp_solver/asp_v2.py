@@ -241,8 +241,10 @@ def verify_and_infer(entities, relations, verification_program, inference_progra
             solution = solve(program)
             solution = ['ok(' + atom + ')' for atom in solution]
             es, rs = convert_solutions_back(solution)
-            es = [emap[e] for e in es]
-            rs = [rmap[r] for r in rs]
+            #print(es)
+            #print(rs)
+            #es = [emap[e] for e in es]
+            #rs = [rmap[r] for r in rs]
             comp_output.append(es + rs)
         final_outputs.append(comp_output)
     final_outputs = answer_set_product(final_outputs)
@@ -292,8 +294,7 @@ def split_entities_relations(atoms, weights):
     relations = []
     relation_weights = []
     for atom, weight in zip(atoms, weights):
-        assert len(atom) == 4 or len(atom) == 7
-        if len(atom) == 4:
+        if match_form(atom) == 'entity':
             entities.append(atom)
             entity_weights.append(weight)
         else:
@@ -340,23 +341,31 @@ if __name__ == '__main__':
     solution_iou = []
     data_points = []
     for i, (pred_row, gt_row) in enumerate(zip(pred_data, gt_data)):
+        if i in [227, 229, 276, 277, 501]:
+            continue
         print(i)
         # print('=============================')
         tokens = gt_row['tokens']
         entities = pred_row['entity_preds']
         relations = pred_row['relation_preds']
 
+        # print('tokens: ', tokens)
+        # print('entities: ', entities)
+        # print('relations: ', relations)
+        # continue
+
         final_outputs = verify_and_infer(entities, relations,
                                          verification_program, inference_program)
         united_atoms, atom_weights = compute_atom_weight(final_outputs)
-        final_entities, final_eweights, final_relations, final_rweights = split_entities_relations(united_atoms,
-                                                                                                   atom_weights)
+
+        data_point = convert_solution_to_data(tokens, united_atoms)
+        _, final_eweights, _, final_rweights = split_entities_relations(united_atoms, atom_weights)
 
         # Convert solution to new data
         data_point = {
-            'tokens': tokens,
-            'entities': final_entities,
-            'relations': final_relations,
+            'tokens': data_point['tokens'],
+            'entities': data_point['entities'],
+            'relations': data_point['relations'],
             'eweights': final_eweights,
             'rweights': final_rweights
         }
