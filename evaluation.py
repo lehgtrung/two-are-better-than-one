@@ -228,11 +228,19 @@ elif args.token_emb_dim > 0 and args.pretrained_wv:
 print("reading data..")
 Trainer = model.get_default_trainer_class()
 flag = args.dataset
+if os.path.exists(f'datasets/unified/test.{flag}.json'):
+    train_path = f'datasets/unified/train.{flag}.json'
+    test_path = f'datasets/unified/test.{flag}.json'
+    valid_path = f'datasets/unified/valid.{flag}.json'
+else:
+    train_path = f'../datasets/unified/train.{flag}.json'
+    test_path = f'../datasets/unified/test.{flag}.json'
+    valid_path = f'../datasets/unified/valid.{flag}.json'
 trainer = Trainer(
     model=model,
-    train_path=f'../datasets/unified/train.{flag}.json',
-    test_path=f'../datasets/unified/test.{flag}.json',
-    valid_path=f'../datasets/unified/valid.{flag}.json',
+    train_path=train_path,
+    test_path=test_path,
+    valid_path=valid_path,
     label_config=args.label_config,
     batch_size=int(args.batch_size),
     tag_form=args.tag_form, num_workers=0,

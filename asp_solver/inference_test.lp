@@ -75,13 +75,10 @@ liveIn(X,P2) :- liveIn(X,P1), locatedIn(P1,P2).
 liveIn(X,P) :- workFor(X,O), orgbasedIn(O,P).
 orgbasedIn(O,P) :- liveIn(X,P), workFor(X,O).
 
-loc("Bob_Miller").
-loc("Nevada.").
-loc("Gov.").
-peop("Bob_Miller").
-locatedIn("Bob_Miller","Gov.").
-liveIn("Bob_Miller","Nevada.").
-
-
-
+locatedIn("Bradley_First_Air","Montreal").
+workFor("Bruce_Jonasson","Bradley_First_Air").
+locatedIn("Bradley_First_Air","Ottawa").
+peop("Bruce_Jonasson").
+loc("Montreal").
+loc("Ottawa").
 

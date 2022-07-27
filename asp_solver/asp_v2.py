@@ -6,12 +6,14 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 import itertools
+from asp_ult import convert_original_to_atoms, format_for_asp
 
 clingo_path = '/home/thoang/anaconda3/bin/clingo'
 clingo_options = ['--outf=2', '-n 0']
 clingo_command = [clingo_path] + clingo_options
 
-drive_command = ['/home/thoang/anaconda3/bin/clingo', 'exp_area/drive.py', 'exp_area/p_star.lp', '--outf=3']
+drive_command = ['/home/thoang/anaconda3/bin/clingo', 'exp_area/drive.py',
+                 'exp_area/p1.lp', 'exp_area/p3.lp', '--outf=3']
 
 
 def union_all_solutions(solutions):
@@ -37,22 +39,12 @@ def solve(program):
 
 def solve_v2(program):
     # Write the program to a file
-    with open('exp_area/p_star.lp', 'w') as f:
+    with open('exp_area/p3.lp', 'w') as f:
         f.write(program)
     process = subprocess.Popen(drive_command, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
     output, error = process.communicate()
     result = ast.literal_eval(output.decode().split('\n')[-2])
     return result
-
-
-def format_for_asp(s, type):
-    if type == 'entity':
-        return s.lower()
-    else:
-        splits = s.split('_')
-        if len(splits) > 1:
-            return '{}{}'.format(splits[0].lower(), splits[1].capitalize())
-        return splits[0].lower()
 
 
 def concat_facts(es, rs):
@@ -215,40 +207,53 @@ def convert_solutions_back(solution):
 
 def verify_and_infer(entities, relations, verification_program, inference_program):
     # Convert facts to a graph and find connected components
-    emap, rmap = create_inverted_index(entities, relations)
     final_outputs = []
-    graph = nx.DiGraph()
-    for entity in entities:
-        etype = format_for_asp(entity[2], 'entity')
-        eword = '_'.join(tokens[entity[0]:entity[1]])
-        graph.add_node(eword, etype=etype)
-    for relation in relations:
-        rtype = format_for_asp(relation[4], 'relation')
-        headword = '_'.join(tokens[relation[0]:relation[1]])
-        tailword = '_'.join(tokens[relation[2]:relation[3]])
-        graph.add_edge(headword, tailword, rtype=rtype)
+    # graph = nx.DiGraph()
+    # for entity in entities:
+    #     etype = format_for_asp(entity[2], 'entity')
+    #     eword = '_'.join(tokens[entity[0]:entity[1]])
+    #     graph.add_node(eword, etype=etype)
+    # for relation in relations:
+    #     rtype = format_for_asp(relation[4], 'relation')
+    #     headword = '_'.join(tokens[relation[0]:relation[1]])
+    #     tailword = '_'.join(tokens[relation[2]:relation[3]])
+    #     graph.add_edge(headword, tailword, rtype=rtype)
 
-    components = nx.weakly_connected_components(graph)
-    for compo in components:
-        comp_output = []
-        sub_graph = graph.subgraph(compo)
-        es, rs = convert_subgraph_to_facts(sub_graph)
-        program = verification_program + '\n' + concat_facts(es, rs)
-        answer_sets = solve_v2(program)
-        for answer_set in answer_sets:
-            es, rs = convert_solutions_back(answer_set)
-            program = inference_program + '\n' + concat_facts(es, rs)
-            solution = solve(program)
-            solution = ['ok(' + atom + ')' for atom in solution]
-            es, rs = convert_solutions_back(solution)
-            #print(es)
-            #print(rs)
-            #es = [emap[e] for e in es]
-            #rs = [rmap[r] for r in rs]
-            comp_output.append(es + rs)
-        final_outputs.append(comp_output)
-    final_outputs = answer_set_product(final_outputs)
+    # Remove connected components
+    es = convert_original_to_atoms(entities, 'entity')
+    rs = convert_original_to_atoms(relations, 'relation')
+    # program = verification_program + '\n' + concat_facts(es, rs)
+    program = concat_facts(es, rs)
+    answer_sets = solve_v2(program)
+    for answer_set in answer_sets:
+        es, rs = convert_solutions_back(answer_set)
+        program = inference_program + '\n' + concat_facts(es, rs)
+        solution = solve(program)
+        if not solution:
+            continue
+        solution = ['ok(' + atom + ')' for atom in solution]
+        es, rs = convert_solutions_back(solution)
+        final_outputs.append(es + rs)
     return final_outputs
+
+
+    # components = nx.weakly_connected_components(graph)
+    # for compo in components:
+    #     comp_output = []
+    #     sub_graph = graph.subgraph(compo)
+    #     es, rs = convert_subgraph_to_facts(sub_graph)
+    #     program = verification_program + '\n' + concat_facts(es, rs)
+    #     answer_sets = solve_v2(program)
+    #     for answer_set in answer_sets:
+    #         es, rs = convert_solutions_back(answer_set)
+    #         program = inference_program + '\n' + concat_facts(es, rs)
+    #         solution = solve(program)
+    #         solution = ['ok(' + atom + ')' for atom in solution]
+    #         es, rs = convert_solutions_back(solution)
+    #         comp_output.append(es + rs)
+    #     final_outputs.append(comp_output)
+    # final_outputs = answer_set_product(final_outputs)
+    # return final_outputs
 
 
 def set_iou(set1, set2):
@@ -272,20 +277,33 @@ def answer_set_product(compos):
     return result
 
 
-def compute_atom_weight(answer_sets):
+def compute_atom_weight(answer_sets, uniform=False):
     # Number of times an atom appears in each answer_set / total number of answer sets
     united_atoms = []
     weights = []
-    for answer_set in answer_sets:
-        for atom in answer_set:
-            united_atoms.append(atom)
-    for atom in united_atoms:
-        weight = 0
+    if uniform:
+        n = len(answer_sets)
+        if n == 0:
+            return [], []
+        print('Number of answer sets: ', n)
+        concat_answer_sets = np.concatenate(answer_sets).tolist()
+        unique_concat_answer_sets = list(set(concat_answer_sets))
+        for atom in unique_concat_answer_sets:
+            if concat_answer_sets.count(atom) == n:
+                united_atoms.append(atom)
+        weights = [1.0 for _ in range(len(united_atoms))]
+        return united_atoms, weights
+    else:
         for answer_set in answer_sets:
-            if atom in answer_set:
-                weight += 1
-        weights.append(weight / len(answer_sets))
-    return united_atoms, weights
+            for atom in answer_set:
+                united_atoms.append(atom)
+        for atom in united_atoms:
+            weight = 0
+            for answer_set in answer_sets:
+                if atom in answer_set:
+                    weight += 1
+            weights.append(weight / len(answer_sets))
+        return united_atoms, weights
 
 
 def split_entities_relations(atoms, weights):
@@ -304,7 +322,7 @@ def split_entities_relations(atoms, weights):
 
 
 if __name__ == '__main__':
-    with open('verification.lp') as f:
+    with open('exp_area/p_star.lp') as f:
         verification_program = f.read()
 
     with open('inference.lp') as f:
@@ -341,22 +359,35 @@ if __name__ == '__main__':
     solution_iou = []
     data_points = []
     for i, (pred_row, gt_row) in enumerate(zip(pred_data, gt_data)):
-        if i in [227, 229, 276, 277, 501]:
-            continue
+        print('=============================')
         print(i)
-        # print('=============================')
+        if i != 24:
+            continue
         tokens = gt_row['tokens']
         entities = pred_row['entity_preds']
         relations = pred_row['relation_preds']
 
-        # print('tokens: ', tokens)
-        # print('entities: ', entities)
-        # print('relations: ', relations)
-        # continue
+        print(convert_original_to_atoms(entities, 'entity'))
+        print(convert_original_to_atoms(relations, 'relation'))
+
+        # if i in [63, 166, 169, 184, 193, 227, 229, 276, 277,
+        #          324, 381, 402, 453, 474, 501, 574, 580, 595, 606, 620, 638]:
+        #     continue
+        if i in [184, 193, 227, 229, 277, 324, 453, 580, 620, 638]:
+            continue
+        # Repeated: 184, 193, 229, 277 (solved), 324 (solved), 453, 638
+        # Stuck: 227, 580, 620
+        # Solvable but slow: 63, 166, 169, 276(with new rules), 381, 402, 474, 501, 574, 595, 606
+        # 277(remove duplication), 324 (remove duplication)
+        # exit()
 
         final_outputs = verify_and_infer(entities, relations,
                                          verification_program, inference_program)
-        united_atoms, atom_weights = compute_atom_weight(final_outputs)
+        united_atoms, atom_weights = compute_atom_weight(final_outputs, uniform=True)
+
+        print(final_outputs)
+        print(united_atoms)
+        print(atom_weights)
 
         data_point = convert_solution_to_data(tokens, united_atoms)
         _, final_eweights, _, final_rweights = split_entities_relations(united_atoms, atom_weights)
@@ -374,5 +405,5 @@ if __name__ == '__main__':
         }
         data_points.append(data_point)
 
-    with open('../datasets/ssl_train_data/argmax_w_all_answersets_with_inference.json', 'w') as f:
-        json.dump(data_points, f)
+    # with open('../datasets/ssl_train_data/argmax_w_all_answersets_with_intersection.json', 'w') as f:
+    #     json.dump(data_points, f)

@@ -50,6 +50,35 @@
 :- ok(org(X)), ok(other(X)).
 
 
+% More regulations
+%:- ok(locatedIn(X,_)), ok(orgbasedIn(X,_)).
+%:- ok(locatedIn(X,_)), ok(liveIn(X,_)).
+%:- ok(locatedIn(X,_)), ok(workFor(X,_)).
+%:- ok(locatedIn(X,_)), ok(kill(X,_)).
+
+%:- ok(orgbasedIn(X,_)), ok(liveIn(X,_)).
+%:- ok(orgbasedIn(X,_)), ok(workFor(X,_)).
+%:- ok(orgbasedIn(X,_)), ok(kill(X,_)).
+
+%:- ok(locatedIn(_,X)), ok(workFor(_,X)).
+%:- ok(locatedIn(_,X)), ok(kill(_,X)).
+
+%:- ok(orgbasedIn(_,X)), ok(workFor(_,X)).
+%:- ok(orgbasedIn(_,X)), ok(kill(_,X)).
+
+%:- ok(liveIn(_,X)), ok(workFor(_,X)).
+%:- ok(liveIn(_,X)), ok(kill(_,X)).
+
+%:- ok(workFor(_,X)), ok(kill(_,X)).
+
+% Directional regulations
+%:- ok(locatedIn(X,Y)), ok(locatedIn(Y,X)).
+%:- ok(orgbasedIn(X,Y)), ok(orgbasedIn(Y,X)).
+%:- ok(liveIn(X,Y)), ok(liveIn(Y,X)).
+%:- ok(workFor(X,Y)), ok(workFor(Y,X)).
+%:- ok(kill(X,Y)), ok(kill(Y,X)).
+
+
 % We don't want a relation if its head or tail entity is not selected
 %:- atom(orgbasedIn(X, Y)), ok(orgbasedIn(X, Y)), not ok(org(X)).
 %:- atom(orgbasedIn(X, Y)), ok(orgbasedIn(X, Y)), not ok(loc(Y)).
@@ -76,17 +105,6 @@
 %:- atom(peop(X)), ok(peop(X)), #count{1,Y : ok(liveIn(X, Y))}==0,
 %#count{1,Y : ok(kill(X, Y))}==0,
 %#count{1,Y : ok(kill(Y, X))}==0.
-
-
-% Facts
-atom(org("CDT_Tuesday")).
-atom(loc("Port_Arther")).
-atom(loc("Galveston")).
-atom(loc("Texas.")).
-atom(locatedIn("Galveston","Texas.")).
-atom(locatedIn("CDT_Tuesday","Texas.")).
-atom(locatedIn("Port_Arther","Texas.")).
-atom(locatedIn("Port_Arther","Galveston")).
 
 
 { ok(X) } :- atom(X).

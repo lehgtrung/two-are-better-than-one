@@ -1,0 +1,45 @@
+Jul 25/2022
+
+Train a model with atoms being an intersection of answer sets
+{'entity_p': 0.8327102803660495,
+'entity_r': 0.8257645968412812,
+'entity_f1': 0.8292229009238792,
+'relation_p': 0.5482456140230648,
+'relation_r': 0.5924170615973361,
+'relation_f1': 0.5694760903850644,
+'relation_p_wNER': 0.5482456140230648,
+'relation_r_wNER': 0.5924170615973361,
+'relation_f1_wNER': 0.5694760903850644}
+
+Label pct: 30%
+Threshold: argmax
+ASP: False
+model: ./ckpts/conll04_30_argmax_wo_asp
+{'entity_p': 0.8471454880216654,
+'entity_r': 0.8526413345611433,
+'entity_f1': 0.8498845329396266,
+'relation_p': 0.49261992619017303,
+'relation_r': 0.6327014217859549,
+'relation_f1': 0.5539419173228981,
+'relation_p_wNER': 0.4907749077400226,
+'relation_r_wNER': 0.6303317535395656,
+'relation_f1_wNER': 0.5518672285377317}
+
+Label pct: 30%
+Threshold: argmax
+ASP: w verification
+model: ./ckpts/conll04_30_verification
+{'entity_p': 0.8624641833728515,
+'entity_r': 0.8368860055529483,
+'entity_f1': 0.8494826028113824,
+'relation_p': 0.6189258311862167,
+'relation_r': 0.5734597156262213,
+'relation_f1': 0.5953259614873617,
+'relation_p_wNER': 0.6163682864292489,
+'relation_r_wNER': 0.5710900473798319,
+'relation_f1_wNER': 0.5928659369017911}
+
+Suggestions:
+- Sample 1 answer set in all answer sets
+- Trustworthy of the model (based on dev set)
+- Apply inference rules for atoms in all answer sets only

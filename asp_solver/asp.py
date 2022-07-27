@@ -10,18 +10,6 @@ clingo_options = ['--outf=2', '-n 0']
 clingo_command = [clingo_path] + clingo_options
 
 
-def collect_all_answer_sets(answer_sets):
-    # Write facts into p1
-
-    # Run clingo drive.py p1.lp p2.lp
-
-    # Write all answer sets into a file
-
-    # Do inference on those answer sets
-    pass
-
-
-
 def union_all_solutions(solutions):
     union = set()
     for solution in solutions:
