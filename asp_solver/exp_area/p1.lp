@@ -109,6 +109,9 @@
 
 { ok(X) } :- atom(X).
 
+% 07/27/2022
+nok(X) :- atom(X), not ok(X).
+
 nOfOKAtoms(N) :- N = #count{1,X : ok(X),atom(X)}.
 
 #maximize {N : nOfOKAtoms(N)}.

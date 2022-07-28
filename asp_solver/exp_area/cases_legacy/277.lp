@@ -1,0 +1,13 @@
+atom(peop("Warner")).
+atom(loc("Ocala")).
+atom(loc("Fla.")).
+atom(loc("U.S.")).
+atom(loc("Jacksonville")).
+atom(loc("Fla.")).
+atom(other("$4_billion")).
+atom(locatedIn("Jacksonville","Fla.")).
+atom(locatedIn("Ocala","Fla.")).
+atom(locatedIn("U.S.","Jacksonville")).
+atom(liveIn("Warner","Ocala")).
+atom(locatedIn("Jacksonville","U.S.")).
+atom(liveIn("Warner","Fla.")).

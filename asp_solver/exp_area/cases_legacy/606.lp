@@ -1,0 +1,12 @@
+atom(peop("Anderson")).
+atom(org("GE")).
+atom(other("June_2")).
+atom(other("1988")).
+atom(other("May")).
+atom(other("July")).
+atom(other("1987")).
+atom(org("GEAE")).
+atom(org("General_Electric_Aircraft_Engine")).
+atom(workFor("Anderson","General_Electric_Aircraft_Engine")).
+atom(workFor("Anderson","GE")).
+atom(locatedIn("Anderson","GEAE")).

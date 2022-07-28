@@ -1,0 +1,11 @@
+atom(peop("Elmore")).
+atom(other("Dutch")).
+atom(peop("Leonard")).
+atom(loc("Birmingham")).
+atom(peop("Tom_Selleck")).
+atom(loc("Detroit")).
+atom(loc("California.")).
+atom(locatedIn("Tom_Selleck","Birmingham")).
+atom(liveIn("Elmore","Birmingham")).
+atom(liveIn("Tom_Selleck","Detroit")).
+atom(liveIn("Leonard","Birmingham")).

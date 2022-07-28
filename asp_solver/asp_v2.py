@@ -12,7 +12,7 @@ clingo_path = '/home/thoang/anaconda3/bin/clingo'
 clingo_options = ['--outf=2', '-n 0']
 clingo_command = [clingo_path] + clingo_options
 
-drive_command = ['/home/thoang/anaconda3/bin/clingo', 'exp_area/drive.py',
+drive_command = ['/home/thoang/anaconda3/bin/clingo', 'exp_area/drive55.py',
                  'exp_area/p1.lp', 'exp_area/p3.lp', '--outf=3']
 
 
@@ -361,8 +361,11 @@ if __name__ == '__main__':
     for i, (pred_row, gt_row) in enumerate(zip(pred_data, gt_data)):
         print('=============================')
         print(i)
-        if i != 24:
+
+        if i not in [63, 166, 169, 184, 193, 227, 229, 276, 277,
+                 324, 381, 402, 453, 474, 501, 574, 580, 595, 606, 620, 638]:
             continue
+
         tokens = gt_row['tokens']
         entities = pred_row['entity_preds']
         relations = pred_row['relation_preds']
@@ -373,8 +376,8 @@ if __name__ == '__main__':
         # if i in [63, 166, 169, 184, 193, 227, 229, 276, 277,
         #          324, 381, 402, 453, 474, 501, 574, 580, 595, 606, 620, 638]:
         #     continue
-        if i in [184, 193, 227, 229, 277, 324, 453, 580, 620, 638]:
-            continue
+        # if i in [184, 193, 227, 229, 277, 324, 453, 580, 620, 638]:
+        #     continue
         # Repeated: 184, 193, 229, 277 (solved), 324 (solved), 453, 638
         # Stuck: 227, 580, 620
         # Solvable but slow: 63, 166, 169, 276(with new rules), 381, 402, 474, 501, 574, 595, 606

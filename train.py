@@ -72,8 +72,9 @@ parser.add_argument('--batch_size',
                     default=32, type=int,
                     action='store',)
 
+# Originally 1000
 parser.add_argument('--evaluate_interval',
-                    default=1000, type=int,
+                    default=500, type=int,
                     action='store',)
 
 parser.add_argument('--max_steps',

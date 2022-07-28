@@ -1,5 +1,4 @@
-
-% Type requirements
+% Type requirements 
 :- ok(locatedIn(P,Q)), ok(org(P)).
 :- ok(locatedIn(P,Q)), ok(peop(P)).
 :- ok(locatedIn(P,Q)), ok(other(P)).
@@ -51,35 +50,38 @@
 :- ok(org(X)), ok(other(X)).
 
 
-% We don't want a relation if its head or tail entity is not selected
-%:- atom(orgbasedIn(X, Y)), ok(orgbasedIn(X, Y)), not ok(org(X)).
-%:- atom(orgbasedIn(X, Y)), ok(orgbasedIn(X, Y)), not ok(loc(Y)).
+% Facts
 
-%:- atom(locatedIn(X, Y)), ok(locatedIn(X, Y)), not ok(loc(X)).
-%:- atom(locatedIn(X, Y)), ok(locatedIn(X, Y)), not ok(loc(Y)).
+%atom(org("CDT_Tuesday")).
+%atom(loc("Port_Arther")).
+%atom(loc("Galveston")).
+%atom(loc("Texas.")).
+%atom(locatedIn("Galveston","Texas.")).
+%atom(locatedIn("CDT_Tuesday","Texas.")).
+%atom(locatedIn("Port_Arther","Texas.")).
+%atom(locatedIn("Port_Arther","Galveston")).
 
-%:- atom(liveIn(X, Y)), ok(liveIn(X, Y)), not ok(peop(X)).
-%:- atom(liveIn(X, Y)), ok(liveIn(X, Y)), not ok(loc(Y)).
 
-%:- atom(workFor(X, Y)), ok(workFor(X, Y)), not ok(peop(X)).
-%:- atom(workFor(X, Y)), ok(workFor(X, Y)), not ok(org(Y)).
-
-%:- atom(kill(X, Y)), ok(kill(X, Y)), not ok(peop(X)).
-%:- atom(kill(X, Y)), ok(kill(X, Y)), not ok(peop(Y)).
-
-% We don't want a standalone entity (how to filter standalone entities)
-%:- atom(org(X)), ok(org(X)), #count{1,Y : ok(orgbasedIn(X, Y))}==0, #count{1,Y : ok(workFor(Y, X))}==0.
-
-%:- atom(loc(X)), ok(loc(X)), #count{1,Y : ok(locatedIn(X, Y))}==0,
-%#count{1,Y : ok(locatedIn(Y, X))}==0, #count{1,Y : ok(orgbasedIn(Y, X))}==0,
-%#count{1,Y : ok(liveIn(Y, X))}==0.
-
-%:- atom(peop(X)), ok(peop(X)), #count{1,Y : ok(liveIn(X, Y))}==0,
-%#count{1,Y : ok(kill(X, Y))}==0,
-%#count{1,Y : ok(kill(Y, X))}==0.
+atom(org("Knight-Ridder_Inc.")).
+atom(loc("Pasadena")).
+atom(loc("Calif.")).
+atom(org("Post-Tribune")).
+atom(loc("Gary")).
+atom(loc("Ind")).
+atom(locatedIn("Knight-Ridder_Inc.","Pasadena")).
+atom(locatedIn("Pasadena","Calif.")).
+atom(orgbasedIn("Post-Tribune","Gary")).
+atom(locatedIn("Post-Tribune","Calif.")).
+atom(locatedIn("Knight-Ridder_Inc.","Ind")).
+atom(locatedIn("Knight-Ridder_Inc.","Gary")).
+atom(orgbasedIn("Knight-Ridder_Inc.","Calif.")).
+atom(locatedIn("Gary","Ind")).
+atom(orgbasedIn("Post-Tribune","Ind")).
 
 
 { ok(X) } :- atom(X).
+
+nok(X) :- atom(X), not ok(X). 
 
 nOfOKAtoms(N) :- N = #count{1,X : ok(X),atom(X)}.
 
@@ -88,4 +90,4 @@ nOfOKAtoms(N) :- N = #count{1,X : ok(X),atom(X)}.
 #show ok/1.
 #show nOfOKAtoms/1.
 
-% Facts
+

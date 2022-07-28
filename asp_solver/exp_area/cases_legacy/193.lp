@@ -1,0 +1,17 @@
+atom(peop("Clinton")).
+atom(peop("Madeleine_Albright")).
+atom(loc("U.S.")).
+atom(org("United_Nations")).
+atom(peop("John_Shalikashvili")).
+atom(org("Joint_Chiefs_of_Staff")).
+atom(loc("East")).
+atom(loc("U.S.")).
+atom(liveIn("Madeleine_Albright","U.S.")).
+atom(locatedIn("United_Nations","U.S.")).
+atom(orgbasedIn("Joint_Chiefs_of_Staff","U.S.")).
+atom(liveIn("Madeleine_Albright","U.S.")).
+atom(orgbasedIn("Joint_Chiefs_of_Staff","U.S.")).
+atom(workFor("John_Shalikashvili","Joint_Chiefs_of_Staff")).
+atom(locatedIn("John_Shalikashvili","U.S.")).
+atom(workFor("Madeleine_Albright","United_Nations")).
+atom(orgbasedIn("United_Nations","U.S.")).

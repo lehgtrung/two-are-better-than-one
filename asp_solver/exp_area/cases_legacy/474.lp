@@ -1,0 +1,11 @@
+atom(other("11_million")).
+atom(other("2.5_million")).
+atom(peop("Richard_Kahn")).
+atom(org("American_Diabetes_Association")).
+atom(loc("Alexandria")).
+atom(loc("Va.")).
+atom(workFor("Richard_Kahn","American_Diabetes_Association")).
+atom(liveIn("Richard_Kahn","Va.")).
+atom(orgbasedIn("American_Diabetes_Association","Va.")).
+atom(orgbasedIn("American_Diabetes_Association","Alexandria")).
+atom(locatedIn("Alexandria","Va.")).

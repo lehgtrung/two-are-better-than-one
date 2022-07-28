@@ -1,0 +1,13 @@
+atom(loc("Soviet")).
+atom(peop("Mikhail_S._Gorbachev")).
+atom(loc("Soviet")).
+atom(loc("U.S.")).
+atom(other("$296_billion")).
+atom(other("8_-LCB-")).
+atom(loc("France")).
+atom(loc("West_Germany")).
+atom(loc("Great_Britain")).
+atom(other("1987.")).
+atom(liveIn("Mikhail_S._Gorbachev","Soviet")).
+atom(liveIn("Mikhail_S._Gorbachev","U.S.")).
+atom(locatedIn("Mikhail_S._Gorbachev","Soviet")).

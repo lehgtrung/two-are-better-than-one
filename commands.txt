@@ -1,0 +1,82 @@
+
+# Train model
+python -u ./train.py \
+    --num_layers 2 \
+    --batch_size 2  \
+    --dataset CoNLL04 \
+    --pretrained_wv ./wv/glove.6B.100d.conll04.txt \
+    --max_epoches 5000 \
+    --max_steps 20000 \
+    --model_class JointModel \
+    --crf None  \
+    --optimizer adam \
+    --lr 0.001  \
+    --tag_form iob2 \
+    --cased 0  \
+    --token_emb_dim 100 \
+    --char_emb_dim 30 \
+    --char_encoder lstm  \
+    --lm_emb_dim 4096 \
+    --head_emb_dim 768 \
+    --lm_emb_path ./wv/albert.conll04_with_heads.pkl \
+    --hidden_dim 200     --ner_tag_vocab_size 9 \
+    --re_tag_vocab_size 11     --vocab_size 15000     --dropout 0.5  \
+    --grad_period 1 --warm_steps 1000 \
+    --model_write_ckpt ./ckpts/conll04_30/ASs_labeled \
+    --train_path {}
+
+# Retrain model
+python -u ./train.py \
+    --num_layers 2 \
+    --batch_size 2  \
+    --dataset CoNLL04 \
+    --pretrained_wv ./wv/glove.6B.100d.conll04.txt \
+    --max_epoches 5000 \
+    --max_steps 40000 \
+    --warm_steps 0 \
+    --model_class JointModel \
+    --model_write_ckpt ./ckpts/ \
+    --crf None  \
+    --optimizer adam \
+    --lr 0.001  \
+    --tag_form iob2 \
+    --cased 0  \
+    --token_emb_dim 100 \
+    --char_emb_dim 30 \
+    --char_encoder lstm  \
+    --lm_emb_dim 4096 \
+    --head_emb_dim 768 \
+    --lm_emb_path ./wv/albert.conll04_with_heads.pkl \
+    --hidden_dim 200     --ner_tag_vocab_size 9 \
+    --re_tag_vocab_size 11     --vocab_size 15000     --dropout 0.5  \
+    --grad_period 1 \
+    --model_read_ckpt ./ckpts/conll04_30/labeled/labeled \
+    --model_write_ckpt ./ckpts/conll04_30/ASs_intersection_retrain/ASs_intersection_retrain \
+    --train_path datasets/ssl_train_data/argmax_w_all_answersets_with_intersection.json
+
+
+# Evaluate model
+
+python -u ./evaluation.py \
+    --num_layers 2 \
+    --batch_size 2  \
+    --dataset CoNLL04 \
+    --pretrained_wv ./wv/glove.6B.100d.conll04.txt \
+    --max_epoches 5000 \
+    --max_steps 20000 \
+    --model_class JointModel \
+    --crf None  \
+    --optimizer adam \
+    --lr 0.001  \
+    --tag_form iob2 \
+    --cased 0  \
+    --token_emb_dim 100 \
+    --char_emb_dim 30 \
+    --char_encoder lstm  \
+    --lm_emb_dim 4096 \
+    --head_emb_dim 768 \
+    --lm_emb_path ./wv/albert.conll04_with_heads.pkl \
+    --hidden_dim 200     --ner_tag_vocab_size 9 \
+    --re_tag_vocab_size 11     --vocab_size 15000     --dropout 0.5  \
+    --grad_period 1 --warm_steps 1000 \
+    --model_read_ckpt ./ckpts/conll04_30/ASs_intersection_retrain/ASs_intersection_retrain

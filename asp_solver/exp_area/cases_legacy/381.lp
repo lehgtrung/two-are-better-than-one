@@ -1,0 +1,11 @@
+atom(other("June")).
+atom(org("State_Department")).
+atom(loc("Washington")).
+atom(loc("U.S.")).
+atom(org("Embassy")).
+atom(loc("Ethiopia")).
+atom(orgbasedIn("State_Department","U.S.")).
+atom(orgbasedIn("Embassy","U.S.")).
+atom(orgbasedIn("State_Department","Washington")).
+atom(locatedIn("Washington","U.S.")).
+atom(locatedIn("U.S.","Ethiopia")).

@@ -1,0 +1,12 @@
+atom(loc("Panama_City")).
+atom(org("Circuito_RPC_Television")).
+atom(other("0200_GMT")).
+atom(other("9_March")).
+atom(peop("Ruben_Blades")).
+atom(org("Papa_Egoro_Movement")).
+atom(org("MPE")).
+atom(peop("Hugo_Enrique_Famania")).
+atom(locatedIn("Hugo_Enrique_Famania","Papa_Egoro_Movement")).
+atom(workFor("Ruben_Blades","Papa_Egoro_Movement")).
+atom(workFor("Hugo_Enrique_Famania","MPE")).
+atom(locatedIn("Circuito_RPC_Television","Panama_City")).

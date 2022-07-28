@@ -1,4 +1,4 @@
-# script (python)
+#script (python)
 
 import datetime
 import string
@@ -11,17 +11,17 @@ global maxLength
 global listAll
 global debug
 
-
 def process_model(m):
     global curr_as
     global listAll
 
     curr_as = m.symbols(atoms=True)
 
-    if (debug): print("List of all elements: {}".format(curr_as), len(curr_as))
+    if (debug): print ("List of all elements: {}".format(curr_as), len(curr_as))
 
 
 def main(prg):
+
     global listAll
     global debug
     # global curr_as
@@ -35,7 +35,7 @@ def main(prg):
 
     # compile the program
 
-    prg.ground([("base", [])])
+    prg.ground([("base",[])])
 
     # get first answer set, process
 
@@ -51,7 +51,7 @@ def main(prg):
 
         ret = prg.solve(on_model=process_model)
 
-        if (not ret.satisfiable): break
+        if (not ret.satisfiable) : break
 
         print("Answer set counter # ", counter, curr_as)
 
@@ -61,31 +61,39 @@ def main(prg):
 
         print("Elimination ", eliminate_atoms)
 
-        if (debug):  print("List of all OK elements *********** : {}".format(keep_atoms))
+        if (debug) :  print ("List of all OK elements *********** : {}".format(keep_atoms))
 
         listAll.append(keep_atoms)
+
 
         # if counter == 0 or len(keep_atoms) >= maxLength :
         #        maxLength =  len(keep_atoms)
         #        listAll.append(keep_atoms)
         # else :   break
 
-        if (debug): print("Current list of all answer sets", len(listAll))
+        if (debug): print ("Current list of all answer sets", len(listAll))
 
-        if len(eliminate_atoms) > 0:
-            constraint = ":- 1{" + ''.join([str(x) + ";" for x in keep_atoms]) + " 1==1}" + str(
-                len(keep_atoms) + 1) + "," + ''.join(["not ok(" + str(x) + ")," for x in eliminate_atoms]) + "1==1."
-        else:
-            break
+        if len(eliminate_atoms) > 0 :
+              constraint = ":- 1{" + ''.join([str(x)+";" for x in keep_atoms]) + " 1==1}" + str(len(keep_atoms)+1)+ ","+ ''.join(["not ok("+str(x)+")," for x in eliminate_atoms]) + "1==1."
+        else :
+              break
 
-        if (debug):  print("Constraint ... \n ", constraint)
+        if (debug):  print("Constraint ... \n ",  constraint)
 
-        prg.add("constraints", [], constraint)
+        prg.add("constraints", [],  constraint)
 
-        prg.ground([("constraints", [])])
+        prg.ground([("constraints",[])])
 
         counter = counter + 1
 
-    print("\n\n All optimal answer sets:", listAll, len(listAll))
+    # print("\n\n All optimal answer sets:",  listAll, len(listAll))
+    newListAll = []
+    for answerset in listAll:
+        _list = []
+        for atom in answerset:
+            atom = str(atom)
+            _list.append(atom)
+        newListAll.append(_list)
+    print(newListAll)
 
-# end.
+#end.

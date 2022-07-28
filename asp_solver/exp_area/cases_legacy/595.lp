@@ -1,0 +1,11 @@
+atom(other("1988")).
+atom(other("Street")).
+atom(other("Sweet")).
+atom(org("Royal_Alexandra_Theatre")).
+atom(loc("Toronto")).
+atom(loc("Canada")).
+atom(other("Legend")).
+atom(loc("Williamstown")).
+atom(orgbasedIn("Royal_Alexandra_Theatre","Canada")).
+atom(orgbasedIn("Royal_Alexandra_Theatre","Toronto")).
+atom(locatedIn("Toronto","Canada")).

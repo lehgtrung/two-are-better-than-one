@@ -1,0 +1,15 @@
+atom(org("Knight-Ridder_Inc.")).
+atom(loc("Pasadena")).
+atom(loc("Calif.")).
+atom(org("Post-Tribune")).
+atom(loc("Gary")).
+atom(loc("Ind")).
+atom(locatedIn("Knight-Ridder_Inc.","Pasadena")).
+atom(locatedIn("Pasadena","Calif.")).
+atom(orgbasedIn("Post-Tribune","Gary")).
+atom(locatedIn("Post-Tribune","Calif.")).
+atom(locatedIn("Knight-Ridder_Inc.","Ind")).
+atom(locatedIn("Knight-Ridder_Inc.","Gary")).
+atom(orgbasedIn("Knight-Ridder_Inc.","Calif.")).
+atom(locatedIn("Gary","Ind")).
+atom(orgbasedIn("Post-Tribune","Ind")).

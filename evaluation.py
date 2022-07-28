@@ -253,7 +253,7 @@ trainer = Trainer(
 
 
 # %%capture cap
-print("=== start training ===")
+print("=== start evaluating ===")
 rets = trainer.evaluate_model(model=model, test_type='test')
 print(rets)
 

@@ -1,6 +1,8 @@
 Jul 25/2022
 
 Train a model with atoms being an intersection of answer sets
+
+Pseudo label only
 {'entity_p': 0.8327102803660495,
 'entity_r': 0.8257645968412812,
 'entity_f1': 0.8292229009238792,
@@ -10,6 +12,18 @@ Train a model with atoms being an intersection of answer sets
 'relation_p_wNER': 0.5482456140230648,
 'relation_r_wNER': 0.5924170615973361,
 'relation_f1_wNER': 0.5694760903850644}
+
+Pseudo label + labeled data
+{'entity_p': 0.8433268858719215,
+'entity_r': 0.808155699714475,
+'entity_f1': 0.8253667836847507,
+'relation_p': 0.5771812080407789,
+'relation_r': 0.6113744075684509,
+'relation_f1': 0.59378596910627,
+'relation_p_wNER': 0.5749440715755046,
+'relation_r_wNER': 0.6090047393220615,
+'relation_f1_wNER': 0.5914844731475805}
+
 
 Label pct: 30%
 Threshold: argmax
