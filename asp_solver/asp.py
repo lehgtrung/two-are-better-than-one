@@ -324,5 +324,5 @@ if __name__ == '__main__':
     print('Mean pred iou: ', np.mean(pred_iou) * 100)
     print('Mean solution iou: ', np.mean(solution_iou) * 100)
 
-    with open('../datasets/ssl_train_data/argmax_w_verification.json', 'w') as f:
-        json.dump(data_points, f)
+    # with open('../datasets/ssl_train_data/argmax_w_verification.json', 'w') as f:
+    #     json.dump(data_points, f)
